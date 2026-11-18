@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Check-In — a daily board for Agent ID holders</title>
+<style>
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 0; background: #0b0e14; color: #e6e9ef; }
+  main { max-width: 640px; margin: 0 auto; padding: 32px 20px 64px; }
+  h1 { font-size: 28px; margin-bottom: 4px; }
+  .sub { color: #9aa4b2; margin-top: 0; }
+  .card { background: #141926; border: 1px solid #232b3d; border-radius: 12px; padding: 20px; margin: 20px 0; }
+  button { background: #f0b90b; color: #111; border: 0; border-radius: 8px; padding: 12px 20px; font-size: 16px; font-weight: 600; cursor: pointer; }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  .row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #232b3d; }
+  .row:last-child { border-bottom: 0; }
+  .k { color: #9aa4b2; } .v { font-weight: 600; word-break: break-all; }
+  .warn { background: #2a2113; border: 1px solid #6b5518; color: #f5d67b; border-radius: 8px; padding: 10px 14px; font-size: 14px; }
+  a { color: #f0b90b; }
+  code { background: #0b0e14; padding: 1px 5px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Agent Check-In</h1>
+  <p class="sub">A daily check-in board for Binance Agent ID holders, on BNB Chain.</p>
+
+  <div id="deployNotice" class="warn" hidden>
+    This page is running with a <strong>placeholder contract address</strong> — the
+    AgentCheckIn contract has not been deployed yet, so check-ins are disabled.
+  </div>
+
+  <div class="card">
+    <button id="connectBtn">Connect wallet</button>
+    <div id="panel" hidden>
+      <div class="row"><span class="k">Wallet</span><span class="v" id="addr">–</span></div>
+      <div class="row"><span class="k">Holds an Agent ID</span><span class="v" id="holds">–</span></div>
+      <div class="row"><span class="k">Current streak</span><span class="v" id="streak">–</span></div>
+      <div class="row"><span class="k">Best streak</span><span class="v" id="best">–</span></div>
+      <div class="row"><span class="k">Total check-ins</span><span class="v" id="total">–</span></div>
+      <div class="row"><span class="k">Checked in today</span><span class="v" id="today">–</span></div>
+      <div class="row"><span class="k">Unique checkers (all users)</span><span class="v" id="unique">–</span></div>
+      <p><button id="checkInBtn" disabled>Check in today</button></p>
+      <p id="status" class="sub"></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>How it works</h2>
+    <ol>
+      <li><strong>Connect your wallet</strong> with the button above — a normal wallet
+        connection in your own wallet app. This page never asks for a pairing code,
+        a seed phrase, or any credential.</li>
+      <li><strong>Agent ID is the key.</strong> The contract checks the Agent ID
+        contract (<code>0x60b9262456de011f7d15a54cdd8c48baaa8b022f</code> on BSC):
+        if your address holds an Agent ID, you can check in. If it doesn't, the
+        check-in is rejected by the contract itself.</li>
+      <li><strong>Check in once a day (UTC).</strong> Consecutive days build your
+        streak; missing a day restarts the current streak at 1. Your best streak
+        and total check-ins are kept on-chain.</li>
+      <li><strong>That's all it does.</strong> Checking in is a free on-chain record
+        (you pay only the normal network gas for your own transaction, which you
+        confirm in your wallet). No tokens are moved, nothing is approved, and
+        there is nothing to buy, earn, or withdraw — this is a participation
+        board, not an investment.</li>
+    </ol>
+  </div>
+
+  <p class="sub">Contract: <code id="contractAddr"></code> · Network: BNB Chain (BSC, chain 56)</p>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
